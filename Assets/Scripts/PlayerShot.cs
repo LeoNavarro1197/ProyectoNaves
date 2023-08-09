@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerShot : MonoBehaviour
 {
     private Rigidbody2D rb;
     Vector2 input;
     float shipAngle;
-    
+
     public Joystick joystick;
     public float speed;
     public float rotationInterpolation = 0.4f;
@@ -38,7 +38,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = input * speed * Time.fixedDeltaTime;
         GetRotation();
     }
 
