@@ -4,51 +4,94 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    Vector2 input;
+    //public PlayerShot playerShot;
+
+    public Rigidbody2D rb;
+    Vector2 input, inputRotacion;
     float shipAngle;
     
-    public Joystick joystick;
+    public Joystick joystickDerecho, joystickIzquierdo;
     public float speed;
     public float rotationInterpolation = 0.4f;
-    public bool isMoving;
+    public bool isMovingController, isMovingShot;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        input.x = joystick.Horizontal;
-        input.y = joystick.Vertical;
+        input.x = joystickDerecho.Horizontal;
+        input.y = joystickDerecho.Vertical;
+
+        inputRotacion.x = joystickIzquierdo.Horizontal;
+        inputRotacion.y = joystickIzquierdo.Vertical;
 
         if (input.x != 0 || input.y != 0)
         {
-            isMoving = true;
+            isMovingController = true;
         }
         else
         {
-            isMoving = false;
+            isMovingController = false;
+        }
+
+        if (inputRotacion.x != 0 || inputRotacion.y != 0)
+        {
+            isMovingShot = true;
+        }
+        else
+        {
+            isMovingShot = false;
         }
     }
 
 
     private void FixedUpdate()
     {
-        rb.velocity = input * speed * Time.fixedDeltaTime;
+        if (isMovingController)
+        {
+            rb.velocity = input * speed * Time.fixedDeltaTime;
+        }
         GetRotation();
+        AloneRotation();
     }
 
     void GetRotation()
     {
         Vector2 lookDir = new Vector2(input.y, input.x);
 
-        if (isMoving)
+        if (isMovingController)
         {
             shipAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg;
+        }
+
+        if (rb.rotation <= -90 && shipAngle >= 90)
+        {
+            rb.rotation += 360;
+            rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
+        }
+        else if (rb.rotation >= 90 && shipAngle <= -90)
+        {
+            rb.rotation -= 360;
+            rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
+        }
+        else
+        {
+            rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
+        }  
+    }
+
+    void AloneRotation()
+    {
+        Vector2 lookDirRotacion = new Vector2(inputRotacion.y, inputRotacion.x);
+
+        if (isMovingShot)
+        {
+            shipAngle = Mathf.Atan2(lookDirRotacion.x, lookDirRotacion.y) * Mathf.Rad2Deg;
         }
 
         if (rb.rotation <= -90 && shipAngle >= 90)

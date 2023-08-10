@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class PlayerShot : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public PlayerController playerController;
+
+    public Rigidbody2D rb;
     Vector2 input;
     float shipAngle;
 
     public Joystick joystick;
-    public float speed;
     public float rotationInterpolation = 0.4f;
-    public bool isMoving;
+    public bool isMovingShot;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -27,11 +28,11 @@ public class PlayerShot : MonoBehaviour
 
         if (input.x != 0 || input.y != 0)
         {
-            isMoving = true;
+            isMovingShot = true;
         }
         else
         {
-            isMoving = false;
+            isMovingShot = false;
         }
     }
 
@@ -43,26 +44,30 @@ public class PlayerShot : MonoBehaviour
 
     void GetRotation()
     {
-        Vector2 lookDir = new Vector2(input.y, input.x);
+        
+        if (!playerController.isMovingController)
+        {
+            Vector2 lookDir = new Vector2(input.y, input.x);
 
-        if (isMoving)
-        {
-            shipAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg;
-        }
+            if (isMovingShot)
+            {
+                shipAngle = Mathf.Atan2(lookDir.x, lookDir.y) * Mathf.Rad2Deg;
+            }
 
-        if (rb.rotation <= -90 && shipAngle >= 90)
-        {
-            rb.rotation += 360;
-            rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
-        }
-        else if (rb.rotation >= 90 && shipAngle <= -90)
-        {
-            rb.rotation -= 360;
-            rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
-        }
-        else
-        {
-            rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
+            if (rb.rotation <= -90 && shipAngle >= 90)
+            {
+                rb.rotation += 360;
+                rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
+            }
+            else if (rb.rotation >= 90 && shipAngle <= -90)
+            {
+                rb.rotation -= 360;
+                rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
+            }
+            else
+            {
+                rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
+            }
         }
     }
 }
