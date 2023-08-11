@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     //public PlayerShot playerShot;
 
     public Rigidbody2D rb;
+    public GameObject shot;
+    public Transform positionShot;
     Vector2 input, inputRotacion;
     float shipAngle;
     
@@ -37,15 +39,28 @@ public class PlayerController : MonoBehaviour
         else
         {
             isMovingController = false;
+            rb.velocity = new Vector2(0, 0);
+            //rb.velocity = Mathf.Lerp(speed, 0, 1);
         }
 
         if (inputRotacion.x != 0 || inputRotacion.y != 0)
         {
             isMovingShot = true;
+            Instantiate(shot, positionShot.position, this.transform.rotation);
+            //StartCoroutine(Shot());
         }
         else
         {
             isMovingShot = false;
+        }
+
+        if (isMovingController && isMovingShot)
+        {
+            //sin rotacion
+
+        }else if (isMovingController)
+        {
+            Rotation();
         }
     }
 
@@ -56,11 +71,11 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = input * speed * Time.fixedDeltaTime;
         }
-        GetRotation();
+        
         AloneRotation();
     }
 
-    void GetRotation()
+    void Rotation()
     {
         Vector2 lookDir = new Vector2(input.y, input.x);
 
@@ -108,5 +123,12 @@ public class PlayerController : MonoBehaviour
         {
             rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
         }
+    }
+
+    IEnumerator Shot()
+    {
+        yield return new WaitForSeconds(1f);
+
+        Instantiate(shot, positionShot.position, this.transform.rotation);
     }
 }
