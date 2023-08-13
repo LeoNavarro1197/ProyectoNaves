@@ -520,11 +520,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 828302473}
-  shot: {fileID: 7977002386811328026, guid: d043decb08d806e498ef54a05dbddac1, type: 3}
+  shot: {fileID: 7977002386811328006, guid: d043decb08d806e498ef54a05dbddac1, type: 3}
   positionShot: {fileID: 128102196}
+  input: {x: 0, y: 0}
+  inputRotacion: {x: 0, y: 0}
   joystickDerecho: {fileID: 1778494688}
   joystickIzquierdo: {fileID: 702096449}
   speed: 200
+  speedBullet: 600
   rotationInterpolation: 0.4
   isMovingController: 0
   isMovingShot: 0
@@ -735,6 +738,18 @@ PrefabInstance:
     - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Name
       value: Joystick Izquierdo
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: snapX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: snapY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: deadZone
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}

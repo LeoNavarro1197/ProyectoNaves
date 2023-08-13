@@ -1,0 +1,4 @@
+leve retraso al disparar
+lerp cuando deja de correr
+disparo cada x segundos
+velocidad de las balas

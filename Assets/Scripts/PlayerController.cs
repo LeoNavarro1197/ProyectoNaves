@@ -7,13 +7,13 @@ public class PlayerController : MonoBehaviour
     //public PlayerShot playerShot;
 
     public Rigidbody2D rb;
-    public GameObject shot;
+    public Rigidbody2D shot;
     public Transform positionShot;
-    Vector2 input, inputRotacion;
+    public Vector2 input, inputRotacion;
     float shipAngle;
     
     public Joystick joystickDerecho, joystickIzquierdo;
-    public float speed;
+    public float speed, speedBullet;
     public float rotationInterpolation = 0.4f;
     public bool isMovingController, isMovingShot;
 
@@ -46,7 +46,6 @@ public class PlayerController : MonoBehaviour
         if (inputRotacion.x != 0 || inputRotacion.y != 0)
         {
             isMovingShot = true;
-            Instantiate(shot, positionShot.position, this.transform.rotation);
             //StartCoroutine(Shot());
         }
         else
@@ -70,6 +69,11 @@ public class PlayerController : MonoBehaviour
         if (isMovingController)
         {
             rb.velocity = input * speed * Time.fixedDeltaTime;
+        }
+
+        if (isMovingShot)
+        {
+            Instantiate(shot, positionShot.position, this.transform.rotation);
         }
         
         AloneRotation();
@@ -128,7 +132,5 @@ public class PlayerController : MonoBehaviour
     IEnumerator Shot()
     {
         yield return new WaitForSeconds(1f);
-
-        Instantiate(shot, positionShot.position, this.transform.rotation);
     }
 }
