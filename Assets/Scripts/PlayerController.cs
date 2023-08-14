@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     //public PlayerShot playerShot;
 
+    public Camera camera;
+
     public Rigidbody2D rb;
     public Rigidbody2D shot;
     public Transform positionShot;
@@ -13,9 +15,13 @@ public class PlayerController : MonoBehaviour
     float shipAngle;
     
     public Joystick joystickDerecho, joystickIzquierdo;
-    public float speed, speedBullet;
+    public float speed;
     public float rotationInterpolation = 0.4f;
     public bool isMovingController, isMovingShot;
+
+    public bool activarDisparo = true;
+
+    public float coolDownPeriodInSeconds;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +32,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        camera.transform.position = this.transform.position;
+
         input.x = joystickDerecho.Horizontal;
         input.y = joystickDerecho.Vertical;
 
@@ -46,7 +54,6 @@ public class PlayerController : MonoBehaviour
         if (inputRotacion.x != 0 || inputRotacion.y != 0)
         {
             isMovingShot = true;
-            //StartCoroutine(Shot());
         }
         else
         {
@@ -66,17 +73,29 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float timeStamp = Time.time + coolDownPeriodInSeconds;
+
         if (isMovingController)
         {
             rb.velocity = input * speed * Time.fixedDeltaTime;
         }
 
+        AloneRotation();
+
         if (isMovingShot)
         {
-            Instantiate(shot, positionShot.position, this.transform.rotation);
+            if (timeStamp <= Time.time)
+            {
+                Instantiate(shot, positionShot.position, this.transform.rotation);
+            }
         }
+
+        /*if(joystickDerecho.DeadZone < joystickDerecho.HandleRange)
+        {
+
+        }*/
         
-        AloneRotation();
+        
     }
 
     void Rotation()
@@ -131,6 +150,9 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Shot()
     {
-        yield return new WaitForSeconds(1f);
+        activarDisparo = false;
+        yield return new WaitForSeconds(1.0f);
+        Instantiate(shot, positionShot.position, this.transform.rotation);
+        activarDisparo = true;
     }
 }
