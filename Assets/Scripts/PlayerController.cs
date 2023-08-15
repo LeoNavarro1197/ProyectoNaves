@@ -73,8 +73,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float timeStamp = Time.time + coolDownPeriodInSeconds;
-
         if (isMovingController)
         {
             rb.velocity = input * speed * Time.fixedDeltaTime;
@@ -84,9 +82,20 @@ public class PlayerController : MonoBehaviour
 
         if (isMovingShot)
         {
-            if (timeStamp <= Time.time)
+            float timeStamp = Time.time;
+            Debug.Log("tiempo " + timeStamp);
+
+            if (Time.time <= coolDownPeriodInSeconds)
             {
                 Instantiate(shot, positionShot.position, this.transform.rotation);
+                timeStamp = 0;
+                return;
+            }
+            else
+            {
+                Instantiate(shot, positionShot.position, this.transform.rotation);
+                timeStamp = 0;
+                return;
             }
         }
 

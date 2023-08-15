@@ -900,6 +900,8 @@ MonoBehaviour:
   rotationInterpolation: 0.2
   isMovingController: 0
   isMovingShot: 0
+  activarDisparo: 1
+  coolDownPeriodInSeconds: 1
 --- !u!1001 &1153287463
 PrefabInstance:
   m_ObjectHideFlags: 0
