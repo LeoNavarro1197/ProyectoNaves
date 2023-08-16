@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
 
     public bool activarDisparo = true;
 
-    public float coolDownPeriodInSeconds;
+    public float cooldownDuration = 5.0f; // Duración del cooldown en segundos
+    private float lastUsedTime = 0.0f; // Tiempo en el que se usó la habilidad por última vez
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +49,7 @@ public class PlayerController : MonoBehaviour
         {
             isMovingController = false;
             rb.velocity = new Vector2(0, 0);
-            //rb.velocity = Mathf.Lerp(speed, 0, 1);
+            //rb.velocity = new Vector2(Mathf.Lerp(speed, 10, 10), Mathf.Lerp(speed, 10, 10));
         }
 
         if (inputRotacion.x != 0 || inputRotacion.y != 0)
@@ -82,20 +83,16 @@ public class PlayerController : MonoBehaviour
 
         if (isMovingShot)
         {
-            float timeStamp = Time.time;
-            Debug.Log("tiempo " + timeStamp);
-
-            if (Time.time <= coolDownPeriodInSeconds)
+            if (Time.time - lastUsedTime >= cooldownDuration)
             {
+                // Realiza la acción de la habilidad aquí
                 Instantiate(shot, positionShot.position, this.transform.rotation);
-                timeStamp = 0;
-                return;
+                // Registra el tiempo en el que se usó la habilidad
+                lastUsedTime = Time.time;
             }
             else
             {
-                Instantiate(shot, positionShot.position, this.transform.rotation);
-                timeStamp = 0;
-                return;
+                // Aún en cooldown, no se puede usar la habilidad
             }
         }
 
@@ -155,13 +152,5 @@ public class PlayerController : MonoBehaviour
         {
             rb.rotation = Mathf.Lerp(rb.rotation, shipAngle, rotationInterpolation);
         }
-    }
-
-    IEnumerator Shot()
-    {
-        activarDisparo = false;
-        yield return new WaitForSeconds(1.0f);
-        Instantiate(shot, positionShot.position, this.transform.rotation);
-        activarDisparo = true;
     }
 }
