@@ -44,12 +44,14 @@ public class PlayerController : MonoBehaviour
         if (input.x != 0 || input.y != 0)
         {
             isMovingController = true;
+            speed = 400;
         }
         else
         {
             isMovingController = false;
-            rb.velocity = new Vector2(0, 0);
-            //rb.velocity = new Vector2(Mathf.Lerp(speed, 10, 10), Mathf.Lerp(speed, 10, 10));
+            rb.velocity = input;
+            //speed = Mathf.Lerp(speed, 0, 1 - 0.95f);
+            //rb.transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
 
         if (inputRotacion.x != 0 || inputRotacion.y != 0)
